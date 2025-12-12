@@ -1,13 +1,17 @@
 package com.example.calculator;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
 
     // User login
     @FXML
@@ -33,23 +37,94 @@ public class LoginController {
     @FXML
     private TextField registerVerifyPasswordField;
 
-    private static final String ADMIN_PASS = "admin123";
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            UserDatabase.init();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to initialize user database: " + e.getMessage());
+        }
+    }
 
     @FXML
     public void handleUserLogin() {
         String u = userUsernameField.getText();
         String p = userPasswordField.getText();
-
+        if (u == null || u.isBlank() || p == null) {
+            showAlert(Alert.AlertType.ERROR, "Login Failed", "Enter username and password.");
+            return;
+        }
+        try {
+            if (UserDatabase.validateUser(u, p)) {
+                showAlert(Alert.AlertType.INFORMATION, "Login Successful", "User login successful.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid user information.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error checking user: " + e.getMessage());
+        }
     }
 
     @FXML
     public void handleAdminLogin() {
         String p = adminPasswordField.getText();
-        if (ADMIN_PASS.equals(p)) {
-            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Admin login successful.");
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid admin credentials.");
+        if (p == null) {
+            showAlert(Alert.AlertType.ERROR, "Login Failed", "Enter admin password.");
+            return;
+        }
+        try {
+            if (UserDatabase.validateAdminByPassword(p)) {
+                showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Admin login successful.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid admin information.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error checking admin: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleRegister() {
+        String username = registerUsernameField.getText();
+        String password = registerPasswordField.getText();
+        String ReEnterredPass = registerVerifyPasswordField.getText();
+
+        if (username == null || username.isBlank()) {
+            showAlert(Alert.AlertType.ERROR, "Registration Failed", "Username cannot be empty.");
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Registration Failed", "Password cannot be empty.");
+            return;
+        }
+        if (password!=ReEnterredPass) {
+            showAlert(Alert.AlertType.ERROR, "Registration Failed", "Passwords do not match.");
+            return;
+        }
+
+        try {
+            boolean ok = UserDatabase.registerUser(username, password);
+            if (ok) {
+                showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "User registered successfully.");
+                registerUsernameField.clear();
+                registerPasswordField.clear();
+                registerVerifyPasswordField.clear();
+                if (tabPane != null) tabPane.getSelectionModel().select(0);
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Registration Failed", "Could not register user.");
+            }
+        } catch (SQLException e) {
+            //ei user ageo register krse
+            String msg = e.getMessage();
+            if (msg != null && msg.toLowerCase().contains("constraint")) {
+                showAlert(Alert.AlertType.ERROR, "Registration Failed", "Username already exists.");
+            } else {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Error registering user: " + e.getMessage());
+            }
         }
     }
 
