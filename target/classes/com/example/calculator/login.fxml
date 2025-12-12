@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="217.0" prefWidth="386.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.calculator.LoginController">
+    <children>
+        <VBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <children>
+                <Label style="-fx-font-size:16px; -fx-font-weight:bold;" text="Scientific Calculator Lite - Login" />
+                <TabPane fx:id="tabPane" prefHeight="220.0" prefWidth="360.0">
+                    <tabs>
+                        <Tab text="User Login">
+                            <content>
+                                <GridPane hgap="8" vgap="8">
+                                    <padding>
+                                        <Insets bottom="10" left="10" right="10" top="10" />
+                                    </padding>
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" prefWidth="100" />
+                                        <ColumnConstraints prefWidth="200" />
+                                    </columnConstraints>
+                                    <children>
+                                        <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <TextField fx:id="userUsernameField" promptText="Enter username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                        <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <PasswordField fx:id="userPasswordField" promptText="Enter password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <Button onAction="#handleUserLogin" text="Login" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                                    </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
+                                </GridPane>
+                            </content>
+                        </Tab>
+                        <Tab text="Admin Login">
+                            <content>
+                                <GridPane hgap="8" vgap="8">
+                                    <padding>
+                                        <Insets bottom="10" left="10" right="10" top="10" />
+                                    </padding>
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" prefWidth="100" />
+                                        <ColumnConstraints prefWidth="200" />
+                                    </columnConstraints>
+                                    <children>
+
+                                        <Label text="Password:" GridPane.columnIndex="0" />
+                                        <PasswordField fx:id="adminPasswordField" promptText="Enter admin password" GridPane.columnIndex="1" />
+
+                                        <Button onAction="#handleAdminLogin" text="Login" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                                    </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
+                                </GridPane>
+                            </content>
+                        </Tab>
+                  <Tab text="Register New User">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane layoutX="1.0" layoutY="3.0" prefHeight="114.0" prefWidth="323.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="0.0" prefWidth="116.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="207.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                                <children>
+                                                <TextField fx:id="registerUsernameField" promptText="Enter User Name" GridPane.columnIndex="1" />
+                                                <TextField fx:id="registerPasswordField" prefHeight="26.0" prefWidth="204.0" promptText="Enter Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="registerVerifyPasswordField" promptText="Re Enter Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <Button mnemonicParsing="false" text="Register" onAction="#handleRegister" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                                                <Label text="User Name: " GridPane.halignment="RIGHT" />
+                                                <Label text="Password: " GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                                                <Label text="Verify Password: " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                                            </children>
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
