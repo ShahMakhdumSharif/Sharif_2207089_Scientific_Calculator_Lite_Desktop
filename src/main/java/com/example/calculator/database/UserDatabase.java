@@ -1,4 +1,4 @@
-package com.example.calculator;
+package com.example.calculator.database;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,8 +17,9 @@ public class UserDatabase {
 
     public static void init() throws SQLException {
         try {
-            if (Files.notExists(DB_PATH.getParent())) {
-                Files.createDirectories(DB_PATH.getParent());
+            Path parent = DB_PATH.getParent();
+            if (parent != null && Files.notExists(parent)) {
+                Files.createDirectories(parent);
             }
         } catch (Exception e) {
             throw new SQLException("Failed to create DB directory", e);

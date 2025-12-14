@@ -1,4 +1,4 @@
-package com.example.calculator;
+package com.example.calculator.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import com.example.calculator.database.UserDatabase;
 
 public class LoginController implements Initializable {
 
@@ -81,7 +83,6 @@ public class LoginController implements Initializable {
         }
         try {
             if (UserDatabase.validateAdminByPassword(p)) {
-                // Load the admin scene and set it on the current stage
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/Admin.fxml"));
                     Parent root = loader.load();

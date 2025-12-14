@@ -1,4 +1,4 @@
-package com.example.calculator;
+package com.example.calculator.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,22 +10,22 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AdminController {
+public class AdminToUserInfoController {
 
     @FXML
-    private Button AdminLogoutButton;
+    private Button AdminUserInfoBackButton;
 
     @FXML
-    private Button AdminAllUserButton;
+    private Button AdminUserInfoLogoutButton;
 
     @FXML
-    protected void handleLogout(ActionEvent event) {
+    protected void handleBack(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/Admin.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) AdminLogoutButton.getScene().getWindow();
+            Stage stage = (Stage) AdminUserInfoBackButton.getScene().getWindow();
             Scene scene = new Scene(root);
-            stage.setTitle("Login - Scientific Calculator Lite");
+            stage.setTitle("Admin - Scientific Calculator Lite");
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
@@ -35,13 +35,13 @@ public class AdminController {
     }
 
     @FXML
-    protected void handleAllUsers(ActionEvent event) {
+    protected void handleLogout(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/AdminToUserInfo.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/login.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) AdminAllUserButton.getScene().getWindow();
+            Stage stage = (Stage) AdminUserInfoLogoutButton.getScene().getWindow();
             Scene scene = new Scene(root);
-            stage.setTitle("Admin - All Users");
+            stage.setTitle("Login - Scientific Calculator Lite");
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
