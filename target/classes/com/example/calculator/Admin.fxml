@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="838.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.AdminController">
+   <children>
+      <VBox layoutX="18.0" layoutY="51.0" prefHeight="628.0" prefWidth="804.0">
+         <children>
+            <Button fx:id="AdminAllUserButton" mnemonicParsing="false" onAction="#handleAllUsers" text="All User" />
+            <Button fx:id="AdminUserHistoryButton" mnemonicParsing="false" text="History" />
+            <Button fx:id="AdminBlockListButton" mnemonicParsing="false" text="Block List" />
+            <Button mnemonicParsing="false" text="Block a User" />
+            <Button fx:id="AdminLimitOperationForUserButton" mnemonicParsing="false" text="Limit Calculation Operation For a User" />
+         </children>
+      </VBox>
+      <Label layoutX="323.0" layoutY="18.0" prefHeight="38.0" prefWidth="194.0" text="Welcome Shah Makhdum Sharif" />
+      <Button fx:id="AdminLogoutButton" layoutX="14.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
+   </children>
+</AnchorPane>

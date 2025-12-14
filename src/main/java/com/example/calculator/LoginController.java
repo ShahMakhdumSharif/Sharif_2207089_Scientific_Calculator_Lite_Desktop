@@ -1,11 +1,16 @@
 package com.example.calculator;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -76,7 +81,20 @@ public class LoginController implements Initializable {
         }
         try {
             if (UserDatabase.validateAdminByPassword(p)) {
-                showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Admin login successful.");
+                // Load the admin scene and set it on the current stage
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/Admin.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) adminPasswordField.getScene().getWindow();
+                    Scene scene = new Scene(root);
+                    stage.setTitle("Admin - Scientific Calculator Lite");
+                    stage.setScene(scene);
+                    stage.setResizable(false);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Load Error", "Failed to load admin page: " + e.getMessage());
+                }
             } else {
                 showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid admin information.");
             }
@@ -100,7 +118,7 @@ public class LoginController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Registration Failed", "Password cannot be empty.");
             return;
         }
-        if (password!=ReEnterredPass) {
+        if (!password.equals(ReEnterredPass)) {
             showAlert(Alert.AlertType.ERROR, "Registration Failed", "Passwords do not match.");
             return;
         }
