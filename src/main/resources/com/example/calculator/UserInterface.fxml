@@ -55,7 +55,7 @@
             <Button fx:id="UserDotButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="." textFill="#ad2f06" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
             <Button fx:id="UserX10PowButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="*10^x" textFill="#ad2f06" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
             <Button fx:id="UserAnsButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Ans" textFill="#390ec6" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-            <Button fx:id="UserEqualButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="=" textFill="#390ec6" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+            <Button fx:id="UserEqualButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="=" textFill="#390ec6" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" onAction="#handleEquals" />
             <Button fx:id="UserSqrtButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="sqrt(x)" textFill="#a41f1f" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
          </children>
       </GridPane>
