@@ -58,13 +58,33 @@ public class LoginController implements Initializable {
     public void handleUserLogin() {
         String u = userUsernameField.getText();
         String p = userPasswordField.getText();
-        if (u == null || u.isBlank() || p == null) {
+        if (u == null || u.isBlank() || p == null || p.isBlank()) {
             showAlert(Alert.AlertType.ERROR, "Login Failed", "Enter username and password.");
             return;
         }
         try {
             if (UserDatabase.validateUser(u, p)) {
-                showAlert(Alert.AlertType.INFORMATION, "Login Successful", "User login successful.");
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/UserInterface.fxml"));
+                    Parent root = loader.load();
+                    Object controller = loader.getController();
+                    if (controller instanceof com.example.calculator.controller.UserInterfaceController) {
+                        ((com.example.calculator.controller.UserInterfaceController) controller).setUsername(u);
+                    }
+                    Stage stage = (Stage) userUsernameField.getScene().getWindow();
+                    Scene currentScene = stage.getScene();
+                    if (currentScene != null) {
+                        currentScene.setRoot(root);
+                    } else {
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                    }
+                    stage.setTitle("User - Scientific Calculator Lite");
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Load Error", "Failed to load user interface: " + e.getMessage());
+                }
             } else {
                 showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid user information.");
             }
@@ -87,10 +107,14 @@ public class LoginController implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/Admin.fxml"));
                     Parent root = loader.load();
                     Stage stage = (Stage) adminPasswordField.getScene().getWindow();
-                    Scene scene = new Scene(root);
+                    Scene currentScene = stage.getScene();
+                    if (currentScene != null) {
+                        currentScene.setRoot(root);
+                    } else {
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                    }
                     stage.setTitle("Admin - Scientific Calculator Lite");
-                    stage.setScene(scene);
-                    stage.setResizable(false);
                     stage.show();
                 } catch (IOException e) {
                     e.printStackTrace();

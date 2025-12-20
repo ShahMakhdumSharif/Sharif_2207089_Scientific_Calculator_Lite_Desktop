@@ -24,10 +24,14 @@ public class AdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) AdminLogoutButton.getScene().getWindow();
-            Scene scene = new Scene(root);
+            Scene currentScene = stage.getScene();
+            if (currentScene != null) {
+                currentScene.setRoot(root);
+            } else {
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            }
             stage.setTitle("Login - Scientific Calculator Lite");
-            stage.setScene(scene);
-            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,10 +44,14 @@ public class AdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/AdminToUserInfo.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) AdminAllUserButton.getScene().getWindow();
-            Scene scene = new Scene(root);
+            Scene currentScene = stage.getScene();
+            if (currentScene != null) {
+                currentScene.setRoot(root);
+            } else {
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            }
             stage.setTitle("Admin - All Users");
-            stage.setScene(scene);
-            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
