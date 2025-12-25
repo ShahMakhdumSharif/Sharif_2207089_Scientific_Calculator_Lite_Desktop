@@ -5,10 +5,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="838.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.controller.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.0" prefWidth="611.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.controller.AdminController">
    <children>
-      <VBox layoutX="18.0" layoutY="51.0" prefHeight="628.0" prefWidth="804.0">
+      <VBox layoutX="50.0" layoutY="52.0" prefHeight="439.0" prefWidth="505.0">
          <children>
             <Button fx:id="AdminAllUserButton" mnemonicParsing="false" onAction="#handleAllUsers" text="All User" />
             <Button fx:id="AdminUserHistoryButton" mnemonicParsing="false" text="History" />
@@ -17,7 +16,7 @@
             <Button fx:id="AdminLimitOperationForUserButton" mnemonicParsing="false" text="Limit Calculation Operation For a User" />
          </children>
       </VBox>
-      <Label layoutX="323.0" layoutY="18.0" prefHeight="38.0" prefWidth="194.0" text="Welcome Shah Makhdum Sharif" />
-      <Button fx:id="AdminLogoutButton" layoutX="14.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
+      <Label layoutX="205.0" layoutY="14.0" prefHeight="38.0" prefWidth="194.0" text="Welcome Shah Makhdum Sharif" />
+      <Button fx:id="AdminLogoutButton" layoutX="50.0" layoutY="498.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
    </children>
 </AnchorPane>

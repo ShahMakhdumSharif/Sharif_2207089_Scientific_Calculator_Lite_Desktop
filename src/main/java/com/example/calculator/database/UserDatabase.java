@@ -76,4 +76,28 @@ public class UserDatabase {
             }
         }
     }
+
+    public static java.util.List<String> getAllUsernames() throws SQLException {
+        java.util.List<String> list = new java.util.ArrayList<>();
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT username FROM users ORDER BY id")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(rs.getString("username"));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static java.util.List<String> getAllNonAdminUsernames() throws SQLException {
+        java.util.List<String> list = new java.util.ArrayList<>();
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT username FROM users WHERE role <> 'admin' ORDER BY id")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(rs.getString("username"));
+                }
+            }
+        }
+        return list;
+    }
 }

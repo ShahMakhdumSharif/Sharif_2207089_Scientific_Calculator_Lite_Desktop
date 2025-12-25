@@ -78,7 +78,7 @@ public class UserInterfaceController {
             String current = UserDisplayButton.getText();
             if (current == null)
                 current = "";
-            UserDisplayButton.setText(current + " " + op + " ");
+            UserDisplayButton.setText(current+ op);
         }
     }
 
