@@ -19,7 +19,8 @@ public class AdminController {
     private Button AdminAllUserButton;
     @FXML
     private Button AdminBlocklistButton;
-
+    @FXML
+    private Button AdminBlockUserButton;
     @FXML
     protected void handleLogout(ActionEvent event) {
         try {
@@ -73,6 +74,25 @@ public class AdminController {
                 stage.setScene(scene);
             }
             stage.setTitle("Admin - Block List");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    protected void handleBlockUser(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/AdminBlockUser.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) AdminAllUserButton.getScene().getWindow();
+            Scene currentScene = stage.getScene();
+            if (currentScene != null) {
+                currentScene.setRoot(root);
+            } else {
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            }
+            stage.setTitle("Admin - Block User");
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

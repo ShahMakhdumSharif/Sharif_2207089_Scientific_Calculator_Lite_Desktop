@@ -12,7 +12,7 @@
             <Button fx:id="AdminAllUserButton" mnemonicParsing="false" onAction="#handleAllUsers" text="All User" />
             <Button fx:id="AdminUserHistoryButton" mnemonicParsing="false" text="History" />
             <Button fx:id="AdminBlocklistButton" mnemonicParsing="false" onAction="#handleBlocklist" text="Block List" />
-            <Button mnemonicParsing="false" text="Block a User" />
+            <Button fx:id="AdminBlockUserButton" mnemonicParsing="false" onAction="#handleBlockUser" text="Block User" />
             <Button fx:id="AdminLimitOperationForUserButton" mnemonicParsing="false" text="Limit Calculation Operation For a User" />
          </children>
       </VBox>
