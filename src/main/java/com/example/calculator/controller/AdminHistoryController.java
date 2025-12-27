@@ -14,18 +14,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
-public class AdminBlockUserController implements Initializable{
+public class AdminHistoryController implements Initializable {
     @FXML
-    private Button AdminBlockUserBackButton;
+    private Button AdminHistoryBackButton;
     @FXML
-    private Button AdminBlockUserLogoutButton;
+    private Button AdminHistoryLogoutButton;
 
     @FXML
     protected void handleLogout(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/login.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) AdminBlockUserLogoutButton.getScene().getWindow();
+            Stage stage = (Stage) AdminHistoryLogoutButton.getScene().getWindow();
             Scene currentScene = stage.getScene();
             if (currentScene != null) {
                 currentScene.setRoot(root);
@@ -45,7 +45,7 @@ public class AdminBlockUserController implements Initializable{
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/Admin.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) AdminBlockUserBackButton.getScene().getWindow();
+            Stage stage = (Stage) AdminHistoryBackButton.getScene().getWindow();
             Scene currentScene = stage.getScene();
             if (currentScene != null) {
                 currentScene.setRoot(root);
