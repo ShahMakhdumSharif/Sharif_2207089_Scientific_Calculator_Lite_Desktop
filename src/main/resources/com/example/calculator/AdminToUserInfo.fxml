@@ -5,11 +5,11 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="706.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.controller.AdminToUserInfoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="579.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.controller.AdminToUserInfoController">
    <children>
-   <ListView fx:id="userListView" layoutX="39.0" layoutY="57.0" prefHeight="466.0" prefWidth="613.0" />
-      <Label layoutX="292.0" layoutY="14.0" text="All User Information" />
+   <ListView fx:id="userListView" layoutX="39.0" layoutY="55.0" prefHeight="468.0" prefWidth="499.0" />
+      <Label layoutX="235.0" layoutY="14.0" text="All User Information" />
    <Button fx:id="AdminUserInfoBackButton" layoutX="39.0" layoutY="545.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
-   <Button fx:id="AdminUserInfoLogoutButton" layoutX="596.0" layoutY="545.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
+   <Button fx:id="AdminUserInfoLogoutButton" layoutX="482.0" layoutY="545.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
    </children>
 </AnchorPane>
