@@ -7,17 +7,23 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import com.example.calculator.database.UserDatabase;
+import com.example.calculator.model.UserInfo;
 
 public class AdminToUserInfoController implements Initializable {
 
@@ -28,7 +34,13 @@ public class AdminToUserInfoController implements Initializable {
     private Button AdminUserInfoLogoutButton;
 
     @FXML
-    private ListView<String> userListView;
+    private TableView<UserInfo> userTable;
+
+    @FXML
+    private TableColumn<UserInfo, String> usernameCol;
+
+    @FXML
+    private TableColumn<UserInfo, String> passwordCol;
 
     @FXML
     protected void handleBack(ActionEvent event) {
@@ -73,12 +85,24 @@ public class AdminToUserInfoController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            List<String> users = UserDatabase.getAllNonAdminUsernames();
-            if (userListView != null) {
-                userListView.setItems(FXCollections.observableArrayList(users));
+            List<UserInfo> users = UserDatabase.getAllNonAdminUsers();
+            if (userTable != null) {
+                ObservableList<UserInfo> items = FXCollections.observableArrayList(users);
+                usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
+                passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
+                userTable.setItems(items);
+                System.out.println("AdminToUserInfo: loaded " + items.size() + " users");
+                if (items.isEmpty()) {
+                    userTable.setPlaceholder(new Label("No users found"));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("Database Error");
+            a.setHeaderText(null);
+            a.setContentText("Failed to load users: " + e.getMessage());
+            a.showAndWait();
         }
     }
 }

@@ -100,4 +100,21 @@ public class UserDatabase {
         }
         return list;
     }
+
+    public static java.util.List<com.example.calculator.model.UserInfo> getAllNonAdminUsers() throws SQLException {
+        java.util.List<com.example.calculator.model.UserInfo> list = new java.util.ArrayList<>();
+        System.out.println("UserDatabase: DB file path = " + DB_PATH.toAbsolutePath());
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT id, username, password FROM users WHERE role <> 'admin' ORDER BY id")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    list.add(new com.example.calculator.model.UserInfo(id, username, password));
+                }
+            }
+        }
+        System.out.println("UserDatabase: fetched non-admin users count = " + list.size());
+        return list;
+    }
 }
