@@ -4,19 +4,41 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.0" prefWidth="611.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.controller.AdminController">
    <children>
-      <VBox layoutX="50.0" layoutY="52.0" prefHeight="439.0" prefWidth="505.0">
+      <VBox layoutX="50.0" layoutY="81.0" prefHeight="400.0" prefWidth="500.0">
          <children>
-            <Button fx:id="AdminAllUserButton" mnemonicParsing="false" onAction="#handleAllUsers" text="All User" />
-            <Button fx:id="AdminUserHistoryButton" mnemonicParsing="false" onAction="#handleHistory" text="History" />
-            <Button fx:id="AdminBlocklistButton" mnemonicParsing="false" onAction="#handleBlocklist" text="Block List" />
-            <Button fx:id="AdminBlockUserButton" mnemonicParsing="false" onAction="#handleBlockUser" text="Block User" />
-            <Button fx:id="AdminLimitOperationForUserButton" mnemonicParsing="false" text="Limit Calculation Operation For a User" />
+            <Button fx:id="AdminAllUserButton" mnemonicParsing="false" onAction="#handleAllUsers" prefHeight="80.0" prefWidth="500.0" text="All User">
+               <font>
+                  <Font size="27.0" />
+               </font></Button>
+            <Button fx:id="AdminUserHistoryButton" mnemonicParsing="false" onAction="#handleHistory" prefHeight="80.0" prefWidth="500.0" text="History">
+               <font>
+                  <Font size="27.0" />
+               </font></Button>
+            <Button fx:id="AdminBlocklistButton" mnemonicParsing="false" onAction="#handleBlocklist" prefHeight="80.0" prefWidth="500.0" text="Block List">
+               <font>
+                  <Font size="27.0" />
+               </font></Button>
+            <Button fx:id="AdminBlockUserButton" mnemonicParsing="false" onAction="#handleBlockUser" prefHeight="80.0" prefWidth="500.0" text="Block User">
+               <font>
+                  <Font size="27.0" />
+               </font></Button>
+            <Button fx:id="AdminLimitOperationButton" mnemonicParsing="false" onAction="#handleLimitOperation" prefHeight="80.0" prefWidth="500.0" text="Limit Calculation Operation For a User">
+               <font>
+                  <Font size="27.0" />
+               </font></Button>
          </children>
       </VBox>
-      <Label layoutX="205.0" layoutY="14.0" prefHeight="38.0" prefWidth="194.0" text="Welcome Shah Makhdum Sharif" />
-      <Button fx:id="AdminLogoutButton" layoutX="50.0" layoutY="498.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
+      <Label alignment="CENTER" layoutX="142.0" layoutY="14.0" prefHeight="58.0" prefWidth="316.0" text="Welcome Shah Makhdum Sharif">
+         <font>
+            <Font name="System Bold Italic" size="20.0" />
+         </font></Label>
+      <Button fx:id="AdminLogoutButton" layoutX="464.0" layoutY="492.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="33.0" prefWidth="86.0" text="Logout" textAlignment="CENTER" textFill="#d01b1b">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
    </children>
 </AnchorPane>

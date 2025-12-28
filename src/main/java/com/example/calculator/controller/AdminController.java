@@ -20,6 +20,8 @@ public class AdminController {
     @FXML
     private Button AdminUserHistoryButton;
     @FXML
+    private Button AdminLimitOperationButton;
+    @FXML
     private Button AdminBlocklistButton;
     @FXML
     private Button AdminBlockUserButton;
@@ -120,5 +122,25 @@ public class AdminController {
             e.printStackTrace();
         }
     }
+    @FXML
+    protected void handleLimitOperation(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/AdminLimitOperation.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) AdminLimitOperationButton.getScene().getWindow();
+            Scene currentScene = stage.getScene();
+            if (currentScene != null) {
+                currentScene.setRoot(root);
+            } else {
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            }
+            stage.setTitle("Admin - Limit Operation");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     
 }
