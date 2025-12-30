@@ -39,6 +39,12 @@ public class UserInterfaceController {
     private Button UserDELButton;
 
     @FXML
+    private Button UserHistoryButton;
+
+    private String currentUsername = null;
+    private int currentUserId = -1;
+
+    @FXML
     protected void handleLogout(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/login.fxml"));
@@ -139,6 +145,15 @@ public class UserInterfaceController {
                 out = df.format(result);
             }
             UserDisplayButton.setText(out);
+
+            if (currentUserId != -1) {
+                try {
+                    String exprForLog = expr;
+                    com.example.calculator.database.UserDatabase.logHistory(currentUserId, exprForLog, out);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             UserDisplayButton.setText("Syntax Error");
         }
@@ -269,6 +284,40 @@ public class UserInterfaceController {
         if (UserWelcomeLabel != null) {
             UserWelcomeLabel.setText("Welcome " + username);
             UserWelcomeLabel.setAlignment(javafx.geometry.Pos.CENTER);
+        }
+        this.currentUsername = username;
+        try {
+            com.example.calculator.model.UserInfo ui = com.example.calculator.database.UserDatabase.getUserByUsername(username);
+            if (ui != null) currentUserId = ui.getId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            currentUserId = -1;
+        }
+    }
+
+    @FXML
+    protected void handleHistory(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/UserHistory.fxml"));
+            Parent root = loader.load();
+            Object controller = loader.getController();
+            if (controller instanceof com.example.calculator.controller.UserHistoryController) {
+                com.example.calculator.controller.UserHistoryController uh = (com.example.calculator.controller.UserHistoryController) controller;
+                uh.setUsername(currentUsername);
+                uh.setOpenedFromAdmin(false);
+            }
+            Stage stage = (Stage) UserHistoryButton.getScene().getWindow();
+            Scene currentScene = stage.getScene();
+            if (currentScene != null) {
+                currentScene.setRoot(root);
+            } else {
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            }
+            stage.setTitle("User History - Scientific Calculator Lite");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -28,7 +28,8 @@ public class UserDatabase {
         try (Connection c = getConnection(); Statement s = c.createStatement()) {
             s.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, role TEXT NOT NULL)");
 
-            // ensure 'blocked' column exists (0/1)
+            s.execute("CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, expression TEXT NOT NULL, result TEXT NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)");
+
             boolean hasBlocked = false;
             try (ResultSet cols = s.executeQuery("PRAGMA table_info(users)")) {
                 while (cols.next()) {
@@ -43,7 +44,7 @@ public class UserDatabase {
                 try (Statement alter = c.createStatement()) {
                     alter.execute("ALTER TABLE users ADD COLUMN blocked INTEGER DEFAULT 0");
                 } catch (SQLException ex) {
-                    // ignore - some older SQLite versions may fail; it's non-fatal
+                    // default
                 }
             }
 
@@ -79,7 +80,6 @@ public class UserDatabase {
     }
 
     public static boolean validateUser(String username, String password) throws SQLException {
-        // Only validate if user exists, password matches and user is not blocked
         try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT count(*) FROM users WHERE username = ? AND password = ? AND (blocked IS NULL OR blocked = 0)")) {
             ps.setString(1, username);
             ps.setString(2, password);
@@ -177,6 +177,47 @@ public class UserDatabase {
                     String username = rs.getString("username");
                     String password = rs.getString("password");
                     list.add(new com.example.calculator.model.UserInfo(id, username, password));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static com.example.calculator.model.UserInfo getUserByUsername(String username) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT id, username, password, role, blocked FROM users WHERE username = ? LIMIT 1")) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String u = rs.getString("username");
+                    String password = rs.getString("password");
+                    return new com.example.calculator.model.UserInfo(id, u, password);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean logHistory(int userId, String expression, String result) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("INSERT INTO history (user_id, expression, result) VALUES (?,?,?)")) {
+            ps.setInt(1, userId);
+            ps.setString(2, expression);
+            ps.setString(3, result);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public static java.util.List<com.example.calculator.model.CalculationHistory> getHistoryForUser(int userId) throws SQLException {
+        java.util.List<com.example.calculator.model.CalculationHistory> list = new java.util.ArrayList<>();
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT id, expression, result, timestamp FROM history WHERE user_id = ? ORDER BY id DESC")) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String expr = rs.getString("expression");
+                    String res = rs.getString("result");
+                    String ts = rs.getString("timestamp");
+                    list.add(new com.example.calculator.model.CalculationHistory(id, userId, expr, res, ts));
                 }
             }
         }

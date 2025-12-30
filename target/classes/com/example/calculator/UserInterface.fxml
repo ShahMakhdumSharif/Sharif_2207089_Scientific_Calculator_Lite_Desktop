@@ -62,7 +62,7 @@
       </GridPane>
       <TextField fx:id="UserDisplayButton" alignment="CENTER_RIGHT" layoutX="20.0" layoutY="103.0" prefHeight="182.0" prefWidth="579.0" />
   <Button fx:id="UserLogoutButton" layoutX="543.0" layoutY="569.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" textFill="#c72e0e" />
-      <Button fx:id="UserHistoryButton" layoutX="21.0" layoutY="569.0" mnemonicParsing="false" text="History" />
+   <Button fx:id="UserHistoryButton" layoutX="21.0" layoutY="569.0" mnemonicParsing="false" onAction="#handleHistory" text="History" />
       <Label fx:id="UserWelcomeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="21.0" layoutY="14.0" prefHeight="40.0" prefWidth="579.0" text="Welcome" textAlignment="CENTER">
          <font>
             <Font size="23.0" />
