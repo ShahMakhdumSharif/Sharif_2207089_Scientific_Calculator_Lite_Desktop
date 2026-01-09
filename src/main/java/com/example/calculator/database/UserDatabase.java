@@ -42,6 +42,8 @@ public class UserDatabase {
             }
             // ensure unblock_requests table exists (id, user_id, message, timestamp, processed)
             s.execute("CREATE TABLE IF NOT EXISTS unblock_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, message TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, processed INTEGER DEFAULT 0)");
+            // ensure user_limits table exists (user_id -> assigned operation)
+            s.execute("CREATE TABLE IF NOT EXISTS user_limits (user_id INTEGER PRIMARY KEY, operation TEXT)");
             if (!hasBlocked) {
                 try (Statement alter = c.createStatement()) {
                     alter.execute("ALTER TABLE users ADD COLUMN blocked INTEGER DEFAULT 0");
@@ -242,7 +244,8 @@ public class UserDatabase {
 
     public static java.util.List<com.example.calculator.model.UnblockRequest> getPendingUnblockRequests() throws SQLException {
         java.util.List<com.example.calculator.model.UnblockRequest> list = new java.util.ArrayList<>();
-        String sql = "SELECT ur.id, ur.user_id, u.username, ur.message, ur.timestamp FROM unblock_requests ur JOIN users u ON ur.user_id = u.id WHERE ur.processed = 0 ORDER BY ur.timestamp DESC";
+    // Only return requests for users who are still blocked
+    String sql = "SELECT ur.id, ur.user_id, u.username, ur.message, ur.timestamp FROM unblock_requests ur JOIN users u ON ur.user_id = u.id WHERE ur.processed = 0 AND (u.blocked IS NOT NULL AND u.blocked = 1) ORDER BY ur.timestamp DESC";
         try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -261,6 +264,38 @@ public class UserDatabase {
     public static boolean markUnblockRequestProcessed(int requestId) throws SQLException {
         try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("UPDATE unblock_requests SET processed = 1 WHERE id = ?")) {
             ps.setInt(1, requestId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public static boolean markUnblockRequestsProcessedForUser(int userId) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("UPDATE unblock_requests SET processed = 1 WHERE user_id = ?")) {
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public static boolean setAssignedOperation(int userId, String operation) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("INSERT OR REPLACE INTO user_limits (user_id, operation) VALUES (?,?)")) {
+            ps.setInt(1, userId);
+            ps.setString(2, operation);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public static String getAssignedOperation(int userId) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT operation FROM user_limits WHERE user_id = ? LIMIT 1")) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString("operation");
+            }
+        }
+        return null;
+    }
+
+    public static boolean clearAssignedOperation(int userId) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("DELETE FROM user_limits WHERE user_id = ?")) {
+            ps.setInt(1, userId);
             return ps.executeUpdate() > 0;
         }
     }

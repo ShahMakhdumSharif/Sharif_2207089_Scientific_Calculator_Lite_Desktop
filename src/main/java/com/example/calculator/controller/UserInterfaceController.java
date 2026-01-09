@@ -33,6 +33,9 @@ public class UserInterfaceController {
     private GridPane UserGridPane;
 
     @FXML
+    private Label UserDirectionLabel;
+
+    @FXML
     private Button UserACButton;
 
     @FXML
@@ -292,6 +295,19 @@ public class UserInterfaceController {
         } catch (Exception e) {
             e.printStackTrace();
             currentUserId = -1;
+        }
+        // fetch assigned operation (if any) and display instruction
+        try {
+            if (currentUserId != -1) {
+                String op = com.example.calculator.database.UserDatabase.getAssignedOperation(currentUserId);
+                if (op != null && !op.isBlank()) {
+                    if (UserDirectionLabel != null) UserDirectionLabel.setText("You are asked to do the operation: '" + op + "'");
+                } else {
+                    if (UserDirectionLabel != null) UserDirectionLabel.setText("You are asked to do the operation: ");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

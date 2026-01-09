@@ -80,6 +80,54 @@ public class AdminLimitOperation1Controller implements Initializable{
             ObservableList<UserInfo> items = FXCollections.observableArrayList(users);
             limitUsernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
             limitTable.setItems(items);
+            // make the username column clickable to open limit operations for that user
+            javafx.util.Callback<TableColumn<UserInfo, String>, javafx.scene.control.TableCell<UserInfo, String>> cellFactory = new javafx.util.Callback<>() {
+                @Override
+                public javafx.scene.control.TableCell<UserInfo, String> call(final TableColumn<UserInfo, String> param) {
+                    final javafx.scene.control.TableCell<UserInfo, String> cell = new javafx.scene.control.TableCell<>() {
+                        private final javafx.scene.control.Button btn = new javafx.scene.control.Button();
+
+                        {
+                            btn.setOnAction((ActionEvent event) -> {
+                                UserInfo data = getTableView().getItems().get(getIndex());
+                                try {
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/LimitOperationsForUser.fxml"));
+                                    Parent root = loader.load();
+                                    Object controller = loader.getController();
+                                    if (controller instanceof com.example.calculator.controller.LimitOperationsController) {
+                                        ((com.example.calculator.controller.LimitOperationsController) controller).setUser(data.getUsername(), data.getId());
+                                    }
+                                    Stage stage = (Stage) btn.getScene().getWindow();
+                                    Scene currentScene = stage.getScene();
+                                    if (currentScene != null) {
+                                        currentScene.setRoot(root);
+                                    } else {
+                                        Scene scene = new Scene(root);
+                                        stage.setScene(scene);
+                                    }
+                                    stage.setTitle("Limit Operations - " + data.getUsername());
+                                    stage.show();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                            } else {
+                                btn.setText(item == null ? "" : item);
+                                setGraphic(btn);
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            };
+            limitUsernameCol.setCellFactory(cellFactory);
         } catch (SQLException e) {
             e.printStackTrace();
         }

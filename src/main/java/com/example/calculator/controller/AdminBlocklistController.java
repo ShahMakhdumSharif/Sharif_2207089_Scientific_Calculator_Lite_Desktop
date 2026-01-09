@@ -101,14 +101,20 @@ public class AdminBlocklistController implements Initializable {
                                 a.showAndWait().ifPresent(bt -> {
                                     if (bt == ButtonType.YES) {
                                         try {
-                                            boolean ok = UserDatabase.unblockUserByUsername(data.getUsername());
-                                            if (ok) {
-                                                getTableView().getItems().remove(data);
-                                            } else {
-                                                Alert err = new Alert(Alert.AlertType.ERROR, "Failed to unblock user.");
-                                                err.setHeaderText(null);
-                                                err.showAndWait();
-                                            }
+                                                    boolean ok = UserDatabase.unblockUserByUsername(data.getUsername());
+                                                    if (ok) {
+                                                        // mark any pending unblock requests for this user as processed so admin won't see them again
+                                                        try {
+                                                            UserDatabase.markUnblockRequestsProcessedForUser(data.getId());
+                                                        } catch (Exception ex) {
+                                                            ex.printStackTrace();
+                                                        }
+                                                        getTableView().getItems().remove(data);
+                                                    } else {
+                                                        Alert err = new Alert(Alert.AlertType.ERROR, "Failed to unblock user.");
+                                                        err.setHeaderText(null);
+                                                        err.showAndWait();
+                                                    }
                                         } catch (SQLException ex) {
                                             ex.printStackTrace();
                                             Alert err = new Alert(Alert.AlertType.ERROR, "DB error while unblocking user.");
