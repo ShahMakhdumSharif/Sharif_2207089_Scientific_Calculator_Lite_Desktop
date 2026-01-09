@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.controller.BlockedRequestController">
+   <children>
+      <VBox alignment="CENTER" layoutX="14.0" layoutY="14.0" spacing="10.0">
+         <children>
+            <Label fx:id="blockedMessageLabel" wrapText="true" text="Your account has been blocked." />
+            <Label text="Message to admin (optional):" />
+            <TextArea fx:id="requestMessageArea" prefHeight="120.0" prefWidth="560.0" />
+            <VBox spacing="8.0">
+               <children>
+                  <Button fx:id="sendRequestButton" mnemonicParsing="false" onAction="#handleSendRequest" text="Request Unblock" />
+                  <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets top="10" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

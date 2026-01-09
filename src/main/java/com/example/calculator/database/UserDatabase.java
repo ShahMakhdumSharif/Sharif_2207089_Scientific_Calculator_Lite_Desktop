@@ -40,6 +40,8 @@ public class UserDatabase {
                     }
                 }
             }
+            // ensure unblock_requests table exists (id, user_id, message, timestamp, processed)
+            s.execute("CREATE TABLE IF NOT EXISTS unblock_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, message TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, processed INTEGER DEFAULT 0)");
             if (!hasBlocked) {
                 try (Statement alter = c.createStatement()) {
                     alter.execute("ALTER TABLE users ADD COLUMN blocked INTEGER DEFAULT 0");
@@ -196,6 +198,71 @@ public class UserDatabase {
             }
         }
         return null;
+    }
+
+    /**
+     * Authenticate user by username/password ignoring blocked flag. Returns UserInfo if credentials match.
+     */
+    public static com.example.calculator.model.UserInfo authenticateUser(String username, String password) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT id, username, password FROM users WHERE username = ? AND password = ? LIMIT 1")) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String u = rs.getString("username");
+                    String pw = rs.getString("password");
+                    return new com.example.calculator.model.UserInfo(id, u, pw);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean isUserBlocked(String username) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("SELECT blocked FROM users WHERE username = ? LIMIT 1")) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int b = rs.getInt("blocked");
+                    return b == 1;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean createUnblockRequest(int userId, String message) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("INSERT INTO unblock_requests (user_id, message) VALUES (?,?)")) {
+            ps.setInt(1, userId);
+            ps.setString(2, message);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public static java.util.List<com.example.calculator.model.UnblockRequest> getPendingUnblockRequests() throws SQLException {
+        java.util.List<com.example.calculator.model.UnblockRequest> list = new java.util.ArrayList<>();
+        String sql = "SELECT ur.id, ur.user_id, u.username, ur.message, ur.timestamp FROM unblock_requests ur JOIN users u ON ur.user_id = u.id WHERE ur.processed = 0 ORDER BY ur.timestamp DESC";
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    int userId = rs.getInt("user_id");
+                    String username = rs.getString("username");
+                    String message = rs.getString("message");
+                    String ts = rs.getString("timestamp");
+                    list.add(new com.example.calculator.model.UnblockRequest(id, userId, username, message, ts));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static boolean markUnblockRequestProcessed(int requestId) throws SQLException {
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement("UPDATE unblock_requests SET processed = 1 WHERE id = ?")) {
+            ps.setInt(1, requestId);
+            return ps.executeUpdate() > 0;
+        }
     }
 
     public static boolean logHistory(int userId, String expression, String result) throws SQLException {

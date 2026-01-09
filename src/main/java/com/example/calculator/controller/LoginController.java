@@ -63,13 +63,20 @@ public class LoginController implements Initializable {
             return;
         }
         try {
-            if (UserDatabase.validateUser(u, p)) {
+            com.example.calculator.model.UserInfo ui = UserDatabase.authenticateUser(u, p);
+            if (ui == null) {
+                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid user information.");
+                return;
+            }
+            boolean blocked = UserDatabase.isUserBlocked(u);
+            if (blocked) {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/UserInterface.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/BlockedRequest.fxml"));
                     Parent root = loader.load();
                     Object controller = loader.getController();
-                    if (controller instanceof com.example.calculator.controller.UserInterfaceController) {
-                        ((com.example.calculator.controller.UserInterfaceController) controller).setUsername(u);
+                    if (controller instanceof com.example.calculator.controller.BlockedRequestController) {
+                        ((com.example.calculator.controller.BlockedRequestController) controller).setUsername(u);
+                        ((com.example.calculator.controller.BlockedRequestController) controller).setUserId(ui.getId());
                     }
                     Stage stage = (Stage) userUsernameField.getScene().getWindow();
                     Scene currentScene = stage.getScene();
@@ -79,14 +86,35 @@ public class LoginController implements Initializable {
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
                     }
-                    stage.setTitle("User - Scientific Calculator Lite");
+                    stage.setTitle("Account Blocked - Scientific Calculator Lite");
                     stage.show();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Load Error", "Failed to load user interface: " + e.getMessage());
+                    showAlert(Alert.AlertType.ERROR, "Load Error", "Failed to load blocked request page: " + e.getMessage());
                 }
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid user information.");
+                return;
+            }
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/UserInterface.fxml"));
+                Parent root = loader.load();
+                Object controller = loader.getController();
+                if (controller instanceof com.example.calculator.controller.UserInterfaceController) {
+                    ((com.example.calculator.controller.UserInterfaceController) controller).setUsername(u);
+                }
+                Stage stage = (Stage) userUsernameField.getScene().getWindow();
+                Scene currentScene = stage.getScene();
+                if (currentScene != null) {
+                    currentScene.setRoot(root);
+                } else {
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                }
+                stage.setTitle("User - Scientific Calculator Lite");
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Load Error", "Failed to load user interface: " + e.getMessage());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,7 +131,30 @@ public class LoginController implements Initializable {
         }
         try {
             if (UserDatabase.validateAdminByPassword(p)) {
+                // load admin page
                 try {
+                    java.util.List<com.example.calculator.model.UnblockRequest> requests = UserDatabase.getPendingUnblockRequests();
+                    if (!requests.isEmpty()) {
+                        StringBuilder sb = new StringBuilder();
+                        for (com.example.calculator.model.UnblockRequest r : requests) {
+                            sb.append(r.getUsername()).append(": ");
+                            String msg = r.getMessage();
+                            if (msg == null || msg.isBlank()) msg = "(no message)";
+                            sb.append(msg).append("\n\n");
+                        }
+                        javafx.scene.control.Alert info = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                        info.setTitle("Unblock Requests");
+                        info.setHeaderText("Pending unblock requests");
+                        javafx.scene.control.TextArea ta = new javafx.scene.control.TextArea(sb.toString());
+                        ta.setEditable(false);
+                        ta.setWrapText(true);
+                        ta.setMaxWidth(Double.MAX_VALUE);
+                        ta.setMaxHeight(Double.MAX_VALUE);
+                        info.getDialogPane().setExpandableContent(ta);
+                        info.getDialogPane().setExpanded(true);
+                        info.showAndWait();
+                    }
+
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calculator/Admin.fxml"));
                     Parent root = loader.load();
                     Stage stage = (Stage) adminPasswordField.getScene().getWindow();
