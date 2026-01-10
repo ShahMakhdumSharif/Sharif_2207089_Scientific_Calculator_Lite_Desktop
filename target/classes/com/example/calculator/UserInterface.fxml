@@ -28,15 +28,15 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="UserLeftShiftButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="&lt;" textAlignment="JUSTIFY" textFill="#807443" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <Button fx:id="UserRightShiftButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="&gt;" textFill="#807443" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <Button fx:id="UserPowerButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="x^" textFill="#5aa0a1" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <Button fx:id="UserMODEButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="MODE" textFill="#22c65b" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
-            <Button fx:id="UserUpShiftButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="^" textFill="#807443" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <Button fx:id="UserDownShiftButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="v" textFill="#807443" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <Button fx:id="UserMatrixButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="MATRIX" textFill="#5aa0a1" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <Button fx:id="UserPolynomialButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="POLYNOMIAL" textFill="#5aa0a1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <Button fx:id="UserLinearButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="LINEAR" textFill="#5aa0a1" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Button fx:id="UserLeftShiftButton" mnemonicParsing="false" onAction="#handleLeftShift" prefHeight="40.0" prefWidth="100.0" text="&lt;" textAlignment="JUSTIFY" textFill="#807443" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button fx:id="UserRightShiftButton" mnemonicParsing="false" onAction="#handleRightShift" prefHeight="40.0" prefWidth="100.0" text="&gt;" textFill="#807443" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button fx:id="UserPowerButton" mnemonicParsing="false" onAction="#handlePowerMode" prefHeight="40.0" prefWidth="100.0" text="x^" textFill="#5aa0a1" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+            <Button fx:id="UserMODEButton" mnemonicParsing="false" onAction="#handleMode" prefHeight="40.0" prefWidth="100.0" text="MODE" textFill="#22c65b" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
+            <Button fx:id="UserUpShiftButton" mnemonicParsing="false" onAction="#handleUpShift" prefHeight="40.0" prefWidth="100.0" text="^" textFill="#807443" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Button fx:id="UserDownShiftButton" mnemonicParsing="false" onAction="#handleDownShift" prefHeight="40.0" prefWidth="100.0" text="v" textFill="#807443" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Button fx:id="UserMatrixButton" mnemonicParsing="false" onAction="#handleMatrixMode" prefHeight="40.0" prefWidth="100.0" text="MATRIX" textFill="#5aa0a1" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Button fx:id="UserPolynomialButton" mnemonicParsing="false" onAction="#handlePolynomialMode" prefHeight="40.0" prefWidth="100.0" text="POLYNOMIAL" textFill="#5aa0a1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Button fx:id="UserLinearButton" mnemonicParsing="false" onAction="#handleLinearMode" prefHeight="40.0" prefWidth="100.0" text="LINEAR" textFill="#5aa0a1" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Button fx:id="User7Button" mnemonicParsing="false" onAction="#handleDigit" prefHeight="40.0" prefWidth="100.0" text="7" textFill="#ad2f06" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
             <Button fx:id="User8Button" mnemonicParsing="false" onAction="#handleDigit" prefHeight="40.0" prefWidth="100.0" text="8" textFill="#ad2f06" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
             <Button fx:id="User9Button" mnemonicParsing="false" onAction="#handleDigit" prefHeight="40.0" prefWidth="100.0" text="9" textFill="#ad2f06" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />

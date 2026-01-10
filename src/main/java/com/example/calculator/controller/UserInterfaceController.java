@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.Locale;
  
 
 public class UserInterfaceController {
@@ -47,6 +48,34 @@ public class UserInterfaceController {
     private String currentUsername = null;
     private int currentUserId = -1;
 
+    // advanced operation modes
+    private enum Mode { NORMAL, MATRIX, POLYNOMIAL, LINEAR, POWER, SQRT }
+    private Mode currentMode = Mode.NORMAL;
+
+    // matrix state
+    private int matrixSize = 2; // 2 or 3
+    private String matrixOp = "ADD"; // ADD, SUB, MUL
+
+    // polynomial state
+    private int polyDegree = 1; // 1..3
+
+    // linear system state
+    private int linearN = 2; // 2 or 3
+
+    // power/sqrt handled simply
+
+    // navigator buttons (present in FXML)
+    @FXML private javafx.scene.control.Button UserLeftShiftButton;
+    @FXML private javafx.scene.control.Button UserRightShiftButton;
+    @FXML private javafx.scene.control.Button UserUpShiftButton;
+    @FXML private javafx.scene.control.Button UserDownShiftButton;
+    @FXML private javafx.scene.control.Button UserMODEButton;
+    @FXML private javafx.scene.control.Button UserMatrixButton;
+    @FXML private javafx.scene.control.Button UserPolynomialButton;
+    @FXML private javafx.scene.control.Button UserLinearButton;
+    @FXML private javafx.scene.control.Button UserPowerButton;
+    @FXML private javafx.scene.control.Button UserSqrtButton;
+
     @FXML
     protected void handleLogout(ActionEvent event) {
         try {
@@ -64,6 +93,187 @@ public class UserInterfaceController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void handleMode(ActionEvent event) {
+        switch (currentMode) {
+            case NORMAL: currentMode = Mode.MATRIX; break;
+            case MATRIX: currentMode = Mode.POLYNOMIAL; break;
+            case POLYNOMIAL: currentMode = Mode.LINEAR; break;
+            case LINEAR: currentMode = Mode.POWER; break;
+            case POWER: currentMode = Mode.SQRT; break;
+            default: currentMode = Mode.NORMAL; break;
+        }
+        updateModeDisplay();
+    }
+
+    @FXML
+    protected void handleUpShift(ActionEvent event) {
+        switch (currentMode) {
+            case MATRIX:
+                matrixSize = (matrixSize == 2) ? 3 : 2;
+                break;
+            case POLYNOMIAL:
+                polyDegree = Math.min(3, polyDegree + 1);
+                break;
+            case LINEAR:
+                linearN = Math.min(3, linearN + 1);
+                break;
+            default:
+        }
+        updateModeDisplay();
+    }
+
+    @FXML
+    protected void handleDownShift(ActionEvent event) {
+        switch (currentMode) {
+            case MATRIX:
+                matrixSize = (matrixSize == 3) ? 2 : 3;
+                break;
+            case POLYNOMIAL:
+                polyDegree = Math.max(1, polyDegree - 1);
+                break;
+            case LINEAR:
+                linearN = Math.max(2, linearN - 1);
+                break;
+            default:
+        }
+        updateModeDisplay();
+    }
+
+    @FXML
+    protected void handleLeftShift(ActionEvent event) {
+        switch (currentMode) {
+            case MATRIX:
+                matrixOp = matrixOp.equals("ADD") ? "MUL" : matrixOp.equals("SUB") ? "ADD" : "SUB";
+                break;
+            default:
+        }
+        updateModeDisplay();
+    }
+
+    @FXML
+    protected void handleRightShift(ActionEvent event) {
+        switch (currentMode) {
+            case MATRIX:
+                matrixOp = matrixOp.equals("ADD") ? "SUB" : matrixOp.equals("SUB") ? "MUL" : "ADD";
+                break;
+            default:
+        }
+        updateModeDisplay();
+    }
+
+    @FXML
+    protected void handleMatrixMode(ActionEvent event) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/example/calculator/dialogs/matrix_dialog.fxml"));
+            javafx.scene.Parent root = loader.load();
+            MatrixDialogController c = loader.getController();
+            Stage dialog = new Stage();
+            c.setStage(dialog);
+            dialog.setTitle("Matrix");
+            dialog.initOwner(UserDisplayButton.getScene().getWindow());
+            dialog.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            dialog.setScene(new javafx.scene.Scene(root));
+            dialog.showAndWait();
+            String res = c.getResult();
+            if (res != null) UserDisplayButton.setText(res);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void handlePolynomialMode(ActionEvent event) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/example/calculator/dialogs/polynomial_dialog.fxml"));
+            javafx.scene.Parent root = loader.load();
+            PolynomialDialogController c = loader.getController();
+            Stage dialog = new Stage();
+            c.setStage(dialog);
+            dialog.setTitle("Polynomial");
+            dialog.initOwner(UserDisplayButton.getScene().getWindow());
+            dialog.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            dialog.setScene(new javafx.scene.Scene(root));
+            dialog.showAndWait();
+            String res = c.getResult(); if (res!=null) UserDisplayButton.setText(res);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML
+    protected void handleLinearMode(ActionEvent event) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/example/calculator/dialogs/linear_dialog.fxml"));
+            javafx.scene.Parent root = loader.load();
+            LinearDialogController c = loader.getController();
+            Stage dialog = new Stage();
+            c.setStage(dialog);
+            dialog.setTitle("Linear System");
+            dialog.initOwner(UserDisplayButton.getScene().getWindow());
+            dialog.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            dialog.setScene(new javafx.scene.Scene(root));
+            dialog.showAndWait();
+            String res = c.getResult(); if (res!=null) UserDisplayButton.setText(res);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML
+    protected void handlePowerMode(ActionEvent event) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/example/calculator/dialogs/power_dialog.fxml"));
+            javafx.scene.Parent root = loader.load();
+            PowerDialogController c = loader.getController();
+            Stage dialog = new Stage();
+            c.setStage(dialog);
+            dialog.setTitle("Power");
+            dialog.initOwner(UserDisplayButton.getScene().getWindow());
+            dialog.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            dialog.setScene(new javafx.scene.Scene(root));
+            dialog.showAndWait();
+            String res = c.getResult(); if (res!=null) UserDisplayButton.setText(res);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML
+    protected void handleSqrtMode(ActionEvent event) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/example/calculator/dialogs/sqrt_dialog.fxml"));
+            javafx.scene.Parent root = loader.load();
+            SqrtDialogController c = loader.getController();
+            Stage dialog = new Stage();
+            c.setStage(dialog);
+            dialog.setTitle("Sqrt");
+            dialog.initOwner(UserDisplayButton.getScene().getWindow());
+            dialog.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            dialog.setScene(new javafx.scene.Scene(root));
+            dialog.showAndWait();
+            String res = c.getResult(); if (res!=null) UserDisplayButton.setText(res);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void updateModeDisplay() {
+        if (UserDirectionLabel == null) return;
+        switch (currentMode) {
+            case NORMAL:
+                UserDirectionLabel.setText("Normal calculator mode");
+                break;
+            case MATRIX:
+                UserDirectionLabel.setText(String.format(Locale.US, "MATRIX mode: %dx%d  OP=%s\nEnter two matrices separated by '|' . Rows as comma-separated. Example 2x2: 1,2;3,4|5,6;7,8", matrixSize, matrixSize, matrixOp));
+                break;
+            case POLYNOMIAL:
+                UserDirectionLabel.setText(String.format(Locale.US, "POLYNOMIAL mode: degree=%d\nEnter coefficients c0,c1,...,cN@x (evaluate at x). Example: 1,2,3@2", polyDegree));
+                break;
+            case LINEAR:
+                UserDirectionLabel.setText(String.format(Locale.US, "LINEAR mode: n=%d\nEnter augmented matrix rows separated by ';' and values by commas. Example 2x2: a,b,c;d,e,f", linearN));
+                break;
+            case POWER:
+                UserDirectionLabel.setText("POWER mode: Enter base,exponent (comma-separated) e.g. 2,3");
+                break;
+            case SQRT:
+                UserDirectionLabel.setText("SQRT mode: Enter value and press = to compute sqrt(x)");
+                break;
         }
     }
 
@@ -129,6 +339,61 @@ public class UserInterfaceController {
             return;
         }
 
+        try {
+            switch (currentMode) {
+                case MATRIX:
+                    try {
+                        String res = com.example.calculator.controller.Calculation.matrix.computeFromString(expr, matrixSize, matrixOp);
+                        UserDisplayButton.setText(res);
+                        if (currentUserId != -1) com.example.calculator.database.UserDatabase.logHistory(currentUserId, "MATRIX:"+expr, res);
+                    } catch (Exception e) {
+                        UserDisplayButton.setText("Syntax Error");
+                    }
+                    return;
+                case POLYNOMIAL:
+                    try {
+                        String res = com.example.calculator.controller.Calculation.polynomial.computeFromString(expr, polyDegree);
+                        UserDisplayButton.setText(res);
+                        if (currentUserId != -1) com.example.calculator.database.UserDatabase.logHistory(currentUserId, "POLY:"+expr, res);
+                    } catch (Exception e) {
+                        UserDisplayButton.setText("Syntax Error");
+                    }
+                    return;
+                case LINEAR:
+                    try {
+                        String res = com.example.calculator.controller.Calculation.linear.computeFromString(expr);
+                        UserDisplayButton.setText(res);
+                        if (currentUserId != -1) com.example.calculator.database.UserDatabase.logHistory(currentUserId, "LINEAR:"+expr, res);
+                    } catch (Exception e) {
+                        UserDisplayButton.setText("Syntax Error");
+                    }
+                    return;
+                case POWER:
+                    try {
+                        String res = com.example.calculator.controller.Calculation.power.computeFromString(expr);
+                        UserDisplayButton.setText(res);
+                        if (currentUserId != -1) com.example.calculator.database.UserDatabase.logHistory(currentUserId, "POWER:"+expr, res);
+                    } catch (Exception e) {
+                        UserDisplayButton.setText("Syntax Error");
+                    }
+                    return;
+                case SQRT:
+                    try {
+                        String out = com.example.calculator.controller.Calculation.squareroot.computeFromString(expr);
+                        UserDisplayButton.setText(out);
+                        if (currentUserId != -1) com.example.calculator.database.UserDatabase.logHistory(currentUserId, "sqrt("+expr+")", out);
+                    } catch (NumberFormatException ne) {
+                        UserDisplayButton.setText("Syntax Error");
+                    }
+                    return;
+                default:
+                    break;
+            }
+        } catch (Exception ex) {
+            UserDisplayButton.setText("Syntax Error");
+            return;
+        }
+
         List<String> tokens;
         try {
             tokens = preprocessTokens(tokenize(expr));
@@ -161,6 +426,8 @@ public class UserInterfaceController {
             UserDisplayButton.setText("Syntax Error");
         }
     }
+
+    
 
     private List<String> tokenize(String expr) {
         List<String> tokens = new ArrayList<>();
@@ -296,7 +563,6 @@ public class UserInterfaceController {
             e.printStackTrace();
             currentUserId = -1;
         }
-        // fetch assigned operation (if any) and display instruction
         try {
             if (currentUserId != -1) {
                 String op = com.example.calculator.database.UserDatabase.getAssignedOperation(currentUserId);

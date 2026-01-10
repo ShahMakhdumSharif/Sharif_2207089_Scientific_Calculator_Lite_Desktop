@@ -80,7 +80,6 @@ public class AdminLimitOperation1Controller implements Initializable{
             ObservableList<UserInfo> items = FXCollections.observableArrayList(users);
             limitUsernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
             limitTable.setItems(items);
-            // make the username column clickable to open limit operations for that user
             javafx.util.Callback<TableColumn<UserInfo, String>, javafx.scene.control.TableCell<UserInfo, String>> cellFactory = new javafx.util.Callback<>() {
                 @Override
                 public javafx.scene.control.TableCell<UserInfo, String> call(final TableColumn<UserInfo, String> param) {

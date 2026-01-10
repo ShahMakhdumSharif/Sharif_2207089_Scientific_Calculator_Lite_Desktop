@@ -55,7 +55,6 @@ public class LimitOperationsController {
 
     @FXML
     protected void initialize() {
-        // wire buttons
         opAdd.setOnAction(e -> assignOp("+"));
         opSub.setOnAction(e -> assignOp("-"));
         opMul.setOnAction(e -> assignOp("*"));

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox spacing="8" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.controller.LinearDialogController" alignment="CENTER" prefWidth="420">
+  <children>
+    <Label text="Linear System" style="-fx-font-size:16px;-fx-font-weight:bold;" />
+    <HBox spacing="8" alignment="CENTER">
+      <Label text="Size:" />
+      <ChoiceBox fx:id="sizeChoice" prefWidth="80" />
+    </HBox>
+    <Label text="Augmented Matrix (each row: coeffs...,rhs)" />
+    <GridPane fx:id="augGrid" hgap="6" vgap="6" />
+    <HBox spacing="8" alignment="CENTER">
+      <Button text="OK" onAction="#onOk" />
+      <Button text="Cancel" onAction="#onCancel" />
+    </HBox>
+  </children>
+</VBox>
